@@ -1,0 +1,12 @@
+version: '3.7'
+
+services:
+  db:
+    container_name: db_psait
+    image: mysql
+    command:  --default-authentication-plugin=mysql_native_password
+    restart: 'no'
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    ports:
+      - 3306:3306
