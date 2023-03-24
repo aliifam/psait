@@ -39,3 +39,17 @@ insert  into `mahasiswa`(`id_mhs`,`nama`,`alamat`) values
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+CREATE TABLE `dosen` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nama` varchar(100) DEFAULT NULL,
+  `prodi` varchar(100) DEFAULT NULL,
+  `gaji` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
+
+insert  into `dosen`(`id`,`nama`,`prodi`, `gaji`) values 
+(1,'Andi','TRPL', 10000000),
+(2,'Dwi','TRE', 8000000),
+(3,'David','TRIK', 9000000),
+(4,'Paul','TRI', 7000000);
