@@ -46,18 +46,38 @@ Route.post('/nilai', async ({ request }) => {
   const data = request.only(['nim', 'kode_mk', 'nilai'])
   const nilai = await Database.table('perkuliahan').insert(data)
 
-  return nilai
+  if (nilai) {
+    return {
+      status: 'success',
+      message: 'Data berhasil ditambahkan',
+    }
+  } else {
+    return {
+      status: 'error',
+      message: 'Data gagal ditambahkan',
+    }
+  }
 })
 
 //update nilai mahasiswa
 Route.put('/nilai/:nim/:kode_mk', async ({ request, params }) => {
-  const data = request.only(['nilai'])
+  const data = request.only(['nilai', 'nim', 'kode_mk'])
   const nilai = await Database.from('perkuliahan')
     .where('nim', params.nim)
     .andWhere('kode_mk', params.kode_mk)
     .update(data)
 
-  return nilai
+  if (nilai) {
+    return {
+      status: 'success',
+      message: 'Data berhasil diubah',
+    }
+  } else {
+    return {
+      status: 'error',
+      message: 'Data gagal diubah',
+    }
+  }
 })
 
 //delete nilai mahasiswa
@@ -67,7 +87,17 @@ Route.delete('/nilai/:nim/:kode_mk', async ({ params }) => {
     .andWhere('kode_mk', params.kode_mk)
     .delete()
 
-  return nilai
+  if (nilai) {
+    return {
+      status: 'success',
+      message: 'Data berhasil dihapus',
+    }
+  } else {
+    return {
+      status: 'error',
+      message: 'Data gagal dihapus',
+    }
+  }
 })
 
 //get mahasiswa dan nimnya
@@ -80,4 +110,13 @@ Route.get('/mahasiswa', async () => {
 Route.get('/matakuliah', async () => {
   const matakuliah = await Database.rawQuery('SELECT kode_mk, nama_mk FROM matakuliah')
   return matakuliah[0]
+})
+
+//get single perkuliahan data by nim dan kode_mk
+Route.get('/perkuliahan/:nim/:kode_mk', async ({ params }) => {
+  const perkuliahan = await Database.rawQuery(
+    'SELECT perkuliahan.id_perkuliahan, mahasiswa.nim, mahasiswa.nama, matakuliah.nama_mk, matakuliah.kode_mk, perkuliahan.nilai FROM perkuliahan join mahasiswa on (perkuliahan.nim = mahasiswa.nim) join matakuliah on (perkuliahan.kode_mk = matakuliah.kode_mk) where mahasiswa.nim = ? and matakuliah.kode_mk = ?',
+    [params.nim, params.kode_mk]
+  )
+  return perkuliahan[0]
 })
