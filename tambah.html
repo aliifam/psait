@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tambah Nilai</title>
+  </head>
+  <body>
+    <h1>Tambah Nilai Mahasiswa</h1>
+
+    <div id="form">
+      <form method="POST" action="http://localhost:3333/nilai">
+        <label>Nama Mahasiswa</label>
+        <select name="nim" id="selectmahasiswa">
+        </select>
+
+        <br>
+        <br>
+
+        <label>Mata Kuliah</label>
+        <select name="kode_mk" id="selectmatkul">
+          
+        </select>
+
+        <br>
+        <br>
+
+        <label>Nilai</label>
+        <input type="number" name="nilai" />
+
+        <br>
+        <br>
+
+        <button type="submit">Submit</button>
+    </div>
+
+    <script>
+      //fetch adonis mahasiswa api
+      let mahasiswa = [];
+      let mataKuliah = [];
+
+      fetch("http://localhost:3333/mahasiswa")
+        .then((response) => response.json())
+        .then((data) => {
+          mahasiswa = data;
+
+          console.log(mahasiswa);
+
+          let selectMahasiswa = document.getElementById("selectmahasiswa");
+          mahasiswa.forEach((item, index) => {
+            let option = document.createElement("option");
+            option.setAttribute("value", item.nim);
+            option.innerHTML = item.nama;
+    
+            selectMahasiswa.appendChild(option);
+    
+            console.log("woi");
+          });
+        });
+
+      fetch("http://localhost:3333/matakuliah")
+        .then((response) => response.json())
+        .then((data) => {
+          mataKuliah = data;
+
+          let selectMataKuliah = document.getElementById("selectmatkul");
+
+      
+
+          mataKuliah.forEach((item, index) => {
+            let option = document.createElement("option");
+            option.setAttribute("value", item.kode_mk);
+            option.innerHTML = item.nama_mk;
+
+            selectMataKuliah.appendChild(option);
+          });
+
+          console.log(mataKuliah);
+        });      
+    </script>
+  </body>
+</html>

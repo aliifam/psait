@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Delete Data</title>
+  </head>
+  <body>
+    <script>
+      //make sure user want to delete data
+
+      const confirmDelete = confirm(
+        "Apakah anda yakin ingin menghapus data ini?"
+      );
+
+      if (confirmDelete) {
+        //get nim and kode_mk from query param
+
+        const urlParams = new URLSearchParams(window.location.search);
+
+        const nim = urlParams.get("nim");
+
+        const kode_mk = urlParams.get("kode_mk");
+
+        //delete data
+
+        fetch(`http://localhost:3333/nilai/${nim}/${kode_mk}`, {
+          method: "DELETE",
+        })
+          .then((res) => res.json())
+
+          .then((data) => {
+            //redirect to index.html
+
+            window.location.href = "/index.html";
+          });
+      } else {
+        //redirect to index.html
+
+        window.location.href = "/index.html";
+      }
+    </script>
+  </body>
+</html>

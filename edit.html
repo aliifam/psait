@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Nilai</title>
+  </head>
+  <body>
+    <h1>Edit Nilai</h1>
+
+    <div id="form">
+      <div id="form">
+        <form method="PUT" action="http://localhost:3333/nilai">
+          <label>Nama Mahasiswa</label>
+          <select name="nim" id="selectmahasiswa">
+          </select>
+  
+          <br>
+          <br>
+  
+          <label>Mata Kuliah</label>
+          <select name="kode_mk" id="selectmatkul">
+            
+          </select>
+  
+          <br>
+          <br>
+  
+          <label>Nilai</label>
+          <input type="number" name="nilai" />
+  
+          <br>
+          <br>
+  
+          <button id="submiteditdata">Submit</button>
+      </div>
+    </div>
+
+    <script>
+
+      //get nim and kode mk from query param
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const nim = urlParams.get('nim');
+      const kode_mk = urlParams.get('kode_mk');
+
+      let currentData, currentMahasiswa, currentMatkul;
+
+      //get current data
+      fetch(`http://localhost:3333/perkuliahan/${nim}/${kode_mk}`)
+        .then((res) => res.json())
+        .then((data) => {
+
+          currentData = data[0]
+
+          currentMahasiswa = {
+            nim: currentData.nim,
+            nama: currentData.nama
+          }
+
+          currentMatkul = {
+            kode_mk: currentData.kode_mk,
+            nama_mk: currentData.nama_mk
+          }
+
+          //get all mahasiswa
+          fetch('http://localhost:3333/mahasiswa')
+            .then((res) => res.json())
+            .then((data) => {
+              //render select mahasiswa
+              const selectMahasiswa = document.querySelector('#selectmahasiswa');
+
+              data.forEach((mahasiswa) => {
+                const option = document.createElement('option');
+                option.value = mahasiswa.nim;
+                option.innerText = mahasiswa.nama;
+
+                if (mahasiswa.nim === currentMahasiswa.nim) {
+                  option.selected = true;
+                }
+
+                selectMahasiswa.appendChild(option);
+              });
+            });
+
+          //get all matkul
+          fetch('http://localhost:3333/matakuliah')
+            .then((res) => res.json())
+            .then((data) => {
+              //render select matkul
+              const selectMatkul = document.querySelector('#selectmatkul');
+
+              data.forEach((matkul) => {
+                const option = document.createElement('option');
+                option.value = matkul.kode_mk;
+                option.innerText = matkul.nama_mk;
+
+                if (matkul.kode_mk === currentMatkul.kode_mk) {
+                  option.selected = true;
+                }
+
+                selectMatkul.appendChild(option);
+              });
+            });
+
+          
+          //set value to form
+          document.querySelector('input[name="nilai"]').value = currentData.nilai
+        });
+
+      //submit edit data
+
+      const submitEditData = document.querySelector('#submiteditdata');
+
+      submitEditData.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        const nim = document.querySelector('select[name="nim"]').value;
+        const kode_mk = document.querySelector('select[name="kode_mk"]').value;
+        const nilai = document.querySelector('input[name="nilai"]').value;
+
+
+        fetch(`http://localhost:3333/nilai/${nim}/${kode_mk}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body:  JSON.stringify({
+            nilai
+          })
+        
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data);
+          })
+
+          //redirect to index.html
+          window.location.href = '/index.html';
+      })
+    </script>
+  </body>
+</html>
