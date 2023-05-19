@@ -9,9 +9,9 @@ services:
       - 3306:3306
     environment:
       MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: psait
-      MYSQL_USER: psait
-      MYSQL_PASSWORD: psait
+      MYSQL_DATABASE: psait11
+      MYSQL_USER: psait11
+      MYSQL_PASSWORD: psait11
 
   adminer:
     image: adminer
