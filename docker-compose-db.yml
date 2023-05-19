@@ -1,0 +1,20 @@
+version: "3.1"
+
+services:
+  db:
+    image: mysql
+    container_name: mysqlpsait
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: psait
+      MYSQL_USER: psait
+      MYSQL_PASSWORD: psait
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
