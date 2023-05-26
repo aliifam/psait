@@ -19,6 +19,9 @@ RUN apt-get update && \
 # Set up Apache configuration
 RUN a2enmod rewrite
 
+# set composer env
+ENV COMPOSER_ALLOW_SUPERUSER=1
+
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
