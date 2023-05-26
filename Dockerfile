@@ -14,7 +14,7 @@ RUN apt-get update && \
         zip \
         unzip \
         default-mysql-client && \
-    docker-php-ext-install zip pdo pdo_mysql
+    docker-php-ext-install zip pdo pdo_mysql mysqli
 
 # Set up Apache configuration
 RUN a2enmod rewrite
