@@ -19,18 +19,6 @@ RUN apt-get update && \
 # Set up Apache configuration
 RUN a2enmod rewrite
 
-# set composer env
-ENV COMPOSER_ALLOW_SUPERUSER=1
-
-# Install Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
-# Install project dependencies
-RUN composer install --no-scripts --no-autoloader
-
-# Generate optimized autoloader
-RUN composer dump-autoload --optimize
-
 # Set file permissions
 RUN chown -R www-data:www-data /var/www/html && \
     chmod -R 755 /var/www/html
