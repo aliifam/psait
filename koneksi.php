@@ -1,6 +1,6 @@
 <?php
 // Membuat variabel, ubah sesuai dengan nama host dan database pada hosting 
-$host = "localhost:3306";
+$host = "bacot.aliif.space";
 $user = "psait11";
 $pass = "psait11";
 $db   = "psait11";
