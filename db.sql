@@ -1,4 +1,4 @@
-USE `db_psait_11`;
+USE `psait11`;
  
 /*Table structure for table `tbl_mahasiswa` */
  

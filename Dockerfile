@@ -1,24 +1,39 @@
-# BASE IMAGE
+# Base image
 FROM php:8.0-apache
-# LABEL
-LABEL maintainer="Aliif Arief Maulana"
-# INSTALL
-RUN apt-get update -y \
-&& apt-get install -y --no-install-recommends \
-wget \
-git \
-zip \
-unzip \
-libxml2-dev \
-&& docker-php-ext-install pdo \
-mysqli \
-pdo_mysql \
-soap \
-&& apt-get clean \
-&& rm -rf /var/lib/apt/lists/*
-# COPY source code
-COPY . /var/www/html/rest-api-php
-# Expose Port
-EXPOSE 8080
-# ENTRYPOINT SETUP
-CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
+
+# Set working directory
+WORKDIR /var/www/html
+
+# Copy project files to the container
+COPY . .
+
+# Install dependencies
+RUN apt-get update && \
+    apt-get install -y \
+        libzip-dev \
+        zip \
+        unzip \
+        default-mysql-client && \
+    docker-php-ext-install zip pdo pdo_mysql
+
+# Set up Apache configuration
+RUN a2enmod rewrite
+
+# Install Composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# Install project dependencies
+RUN composer install --no-scripts --no-autoloader
+
+# Generate optimized autoloader
+RUN composer dump-autoload --optimize
+
+# Set file permissions
+RUN chown -R www-data:www-data /var/www/html && \
+    chmod -R 755 /var/www/html
+
+# Expose port 80
+EXPOSE 80
+
+# Start the Apache server
+CMD ["apache2-foreground"]
